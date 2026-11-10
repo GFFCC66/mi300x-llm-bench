@@ -1,0 +1,19 @@
+# Small sweep for the mock server in the quickstart.
+# input_len is a word count, not a tokenizer count.
+
+base_url: http://127.0.0.1:8000/v1
+model: mock
+api_key: null
+num_requests: 8
+warmup: 1
+concurrency: [1, 4]
+input_len: [64, 256]
+output_len: [16]
+temperature: 0
+ignore_eos: false
+seed: 1
+timeout_s: 60
+dataset: null
+output_dir: results/mock_sweep
+save_requests: false
+skip_health_check: false
