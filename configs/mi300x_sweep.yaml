@@ -1,0 +1,32 @@
+# Shape of a single-GPU MI300X sweep. Nothing in this file has been measured.
+#
+# Llama-3.1-70B-Instruct bf16 weights are about 140 GB and fit on one
+# MI300X (192 GB HBM3) with tensor parallel size 1. KV cache for the long
+# points below may not fit beside those weights; drop 131072, or lower
+# concurrency, if the server refuses the context.
+#
+# ignore_eos asks vLLM/SGLang to generate the full output_len. Leave it
+# false when talking to a strict OpenAI endpoint.
+#
+# Start the server first, for example:
+#   MODEL=meta-llama/Llama-3.1-70B-Instruct MAX_MODEL_LEN=131072 \
+#     scripts/launch_vllm_rocm.sh
+# Then:
+#   python -m mi300x_bench sweep --config configs/mi300x_sweep.yaml
+
+base_url: http://127.0.0.1:8000/v1
+model: meta-llama/Llama-3.1-70B-Instruct
+api_key: null
+num_requests: 20
+warmup: 2
+concurrency: [1, 4, 16]
+input_len: [8192, 32768, 131072]
+output_len: [128]
+temperature: 0
+ignore_eos: true
+seed: 0
+timeout_s: 3600
+dataset: null
+output_dir: results/mi300x_sweep
+save_requests: false
+skip_health_check: false
